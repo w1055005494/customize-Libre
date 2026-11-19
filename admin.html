@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f1622">
+    <meta name="robots" content="noindex, nofollow">
+    <title>LibreTV 黑名单管理陆狗屎-</title>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        html,
+        body {
+            margin: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0f1622;
+            color: #e8ecf5;
+            font-family: "Inter", "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Hiragino Sans GB",
+                "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-head {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 30px 20px 12px;
+        }
+
+        .page-head h1 {
+            margin: 0 0 6px;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .page-head p {
+            margin: 0;
+            color: #8f9bb0;
+            font-size: 13.5px;
+        }
+
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 8px 20px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            padding: 18px 20px;
+            border-radius: 14px;
+            background: #111;
+            border: 1px solid #333;
+        }
+
+        .card h2 {
+            margin: 0 0 12px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 36px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .meta-label {
+            color: #8f9bb0;
+            font-size: 13px;
+        }
+
+        .meta-item strong {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hint {
+            margin: 0 0 14px;
+            color: #8f9bb0;
+            font-size: 13px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #a7b1c2;
+            font-size: 13px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: 9px;
+            background: #0b111b;
+            border: 1px solid #333;
+            color: #e8ecf5;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        input::placeholder {
+            color: #66708a;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: 9px;
+            border: 1px solid #3a3a3a;
+            background: #1b2230;
+            color: #e8ecf5;
+            font-size: 14px;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: #242d3f;
+            border-color: #4a4a4a;
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #7c3aed;
+            border-color: #7c3aed;
+            color: #fff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+
+        .btn-danger {
+            background: #1e1414;
+            border-color: #5b2b2b;
+            color: #fca5a5;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #2a1818;
+            border-color: #7f1d1d;
+        }
+
+        .btn-sm {
+            min-height: 30px;
+            padding: 0 10px;
+            border-radius: 7px;
+            font-size: 12.5px;
+        }
+
+        .unlock-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .unlock-row input {
+            flex: 1 1 240px;
+        }
+
+        .error {
+            margin: 10px 0 0;
+            color: #fca5a5;
+            font-size: 13px;
+        }
+
+        .add-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1.4fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .list-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .list-head h2 {
+            margin: 0;
+        }
+
+        .filter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter label {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .filter input {
+            width: 230px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #333;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 13.5px;
+            vertical-align: top;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        th {
+            background: #161b24;
+            color: #a7b1c2;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        tbody tr:hover {
+            background: #151b25;
+        }
+
+        td.title-cell {
+            word-break: break-word;
+        }
+
+        td.mode-cell {
+            color: #c4b5fd;
+            white-space: nowrap;
+        }
+
+        td.note-cell {
+            color: #9aa3b2;
+            word-break: break-word;
+        }
+
+        td.time-cell {
+            color: #9aa3b2;
+            white-space: nowrap;
+        }
+
+        td.actions {
+            white-space: nowrap;
+        }
+
+        td.actions .btn + .btn {
+            margin-left: 8px;
+        }
+
+        .empty {
+            margin: 14px 0 0;
+            text-align: center;
+            color: #8f9bb0;
+            font-size: 13px;
+        }
+
+        .status {
+            position: sticky;
+            bottom: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #111;
+            border: 1px solid #333;
+            color: #c0c9d8;
+            font-size: 13px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        @media (max-width: 860px) {
+            .add-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .add-grid .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-head {
+                padding: 22px 14px 8px;
+            }
+
+            .page-head h1 {
+                font-size: 22px;
+            }
+
+            .wrap {
+                padding: 8px 14px 40px;
+            }
+
+            .card {
+                padding: 14px;
+            }
+
+            .filter {
+                width: 100%;
+            }
+
+            .filter input {
+                flex: 1;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-head">
+        <h1>LibreTV 黑名单管理(陆狗屎)</h1>
+        <p>维护搜索结果屏蔽列表，保存后对所有访客生效。</p>
+    </header>
+
+    <main class="wrap">
+        <!-- 版本与更新时间 -->
+        <section class="card meta" aria-label="黑名单版本信息">
+            <div class="meta-item">
+                <span class="meta-label">版本</span>
+                <strong id="versionText">—</strong>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">更新时间</span>
+                <strong id="updatedAtText">—</strong>
+            </div>
+        </section>
+
+        <!-- 口令解锁区 -->
+        <section id="unlockSection" class="card" aria-label="管理员解锁">
+            <h2>管理员解锁</h2>
+            <p class="hint">请输入部署时配置的管理员口令，口令仅保存在当前浏览器会话中。</p>
+            <form id="unlockForm">
+                <label for="passwordInput">管理员口令</label>
+                <div class="unlock-row">
+                    <input id="passwordInput" type="password" autocomplete="current-password" placeholder="请输入管理员口令">
+                    <button id="unlockBtn" type="submit" class="btn btn-primary">解锁</button>
+                </div>
+                <p id="unlockError" class="error" role="alert" hidden></p>
+            </form>
+        </section>
+
+        <!-- 解锁后的主区 -->
+        <section id="mainSection" hidden>
+            <div class="wrap" style="padding: 0; gap: 16px;">
+                <section class="card" aria-label="新增黑名单条目">
+                    <h2>新增黑名单条目</h2>
+                    <form id="addForm" class="add-grid">
+                        <div>
+                            <label for="titleInput">片名</label>
+                            <input id="titleInput" type="text" maxlength="100" autocomplete="off" placeholder="例如：某剧名">
+                        </div>
+                        <div>
+                            <label for="modeSelect">匹配模式</label>
+                            <select id="modeSelect">
+                                <option value="exact" selected>精确匹配（exact）</option>
+                                <option value="contains">包含匹配（contains）</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="noteInput">备注（可选）</label>
+                            <input id="noteInput" type="text" maxlength="200" autocomplete="off" placeholder="仅管理员可见">
+                        </div>
+                        <button id="addBtn" type="submit" class="btn btn-primary">添加</button>
+                    </form>
+                </section>
+
+                <section class="card" aria-label="黑名单条目列表">
+                    <div class="list-head">
+                        <h2>黑名单条目</h2>
+                        <div class="filter">
+                            <label for="filterInput">过滤</label>
+                            <input id="filterInput" type="search" autocomplete="off" placeholder="按片名或备注过滤">
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table id="entriesTable">
+                            <thead>
+                                <tr>
+                                    <th>片名</th>
+                                    <th>模式</th>
+                                    <th>备注</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="entriesBody"></tbody>
+                        </table>
+                    </div>
+                    <p id="emptyHint" class="empty" hidden>暂无黑名单条目</p>
+                </section>
+
+                <div id="statusBar" class="status" role="status" aria-live="polite">已就绪</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/admin-blacklist.js" defer></script>
+</body>
+</html>
